@@ -1,0 +1,27 @@
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+
+
+.small-icon {
+  font-size: 42px;
+}
+
+.medium-icon {
+  font-size: 54px;
+}
+
+.Large-icon {
+  font-size: 64px;
+  margin: 0;
+}
+
+.large-icon {
+  font-size: 64px;
+  margin: 0;
+}
+
+ion-modal {
+  --height: auto;
+}
