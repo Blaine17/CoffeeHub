@@ -6,6 +6,7 @@ import { cafeOutline } from 'ionicons/icons'
 import { caretDownCircleOutline } from 'ionicons/icons';
 import CustomizationModal from '../components/CustomizationModal';
 import { CustomizationContextProvider } from '../components/CustomizationContext';
+import CustomizationButton from '../components/CustomizationButton';
 
 
 import {
@@ -28,9 +29,30 @@ import {
   IonCheckbox,
   useIonModal,
   IonSelect,
-  IonSelectOption
+  IonSelectOption,
+  IonFabButton,
+  IonFab,
+  IonFooter
   
 } from "@ionic/react"
+
+const AmountSelector = ({handleChoice, item, amount}) => {
+  console.log(amount)
+  console.log(item)
+
+  if(!amount) return null
+
+  return (
+    <IonItem>
+    <IonSelect className='px-2' interface="popover" justify="start" label={item.name} placeholder="amount">
+      {amount.map(option => {
+        console.log(amount)
+         return <IonSelectOption onClick={() =>handleChoice()} value={option}>{option}</IonSelectOption>
+      })}
+        </IonSelect>
+        </IonItem>
+  )
+}
 
 import { useState, Fragment, useRef, forwardRef, useEffect, createContext, useReducer } from 'react'
 
@@ -91,18 +113,14 @@ const ItemPage = ({ match }) => {
 
       <CustomizationContextProvider>
       {product.customizations.map((customization) => {
-        return <Fragment key={customization.name}>
-        <IonButton onClick={() => handleClick(customization)} id={customization.name} className="px-4 py-2" expand="block" color="primary" fill="outline">
-        <IonIcon size='large'icon={caretDownCircleOutline} slot='end'></IonIcon>
-        {customization.name}
-      </IonButton>
-        </Fragment>
+        return <CustomizationButton key={customization.id} customization={customization} handleClick={handleClick}/>
       })}
 
         <IonModal isOpen={isOpen} initialBreakpoint={1} breakpoints={[0, 1]}
         onIonModalDidDismiss={() => setIsOpen(false)}>
           <CustomizationModal setIsOpen={setIsOpen} modalData={modalData}/>
         </IonModal>
+
         </CustomizationContextProvider>
      
     </>
@@ -110,5 +128,20 @@ const ItemPage = ({ match }) => {
 }
 
 export default ItemPage
+
+// return customization.amount.length === 0
+// ? <Fragment key={customization.name}>
+// <IonButton onClick={() => handleClick(customization)} id={customization.name} className="px-4 py-2" expand="block" color="primary" fill="outline">
+// <IonIcon size='large'icon={caretDownCircleOutline} slot='end'></IonIcon>
+// {customization.name}
+// </IonButton>
+// </Fragment>
+// : <Fragment key={customization.name}>
+// <IonButton onClick={() => handleClick(customization)} id={customization.name} className="px-4 py-2" expand="block" color="primary" fill="outline">
+// <IonIcon size='large'icon={caretDownCircleOutline} slot='end'></IonIcon>
+// {customization.name}
+// </IonButton>
+// <AmountSelector item={customization} amount={customization.amount}/>
+// </Fragment>
 
 

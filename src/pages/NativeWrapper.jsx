@@ -7,10 +7,15 @@ import {
   IonSearchbar,
   IonBackButton,
   IonButtons,
-  IonIcon
+  IonButton,
+  IonIcon,
+  IonFooter,
+  IonBadge
   
 } from "@ionic/react";
 import "./Home.css";
+
+import {bag} from 'ionicons/icons'
 
 
 
@@ -25,6 +30,11 @@ const NativeWrapper = ({ title, content }) => {
           <IonButtons slot="start">
             <IonBackButton></IonBackButton>
           </IonButtons>
+        <IonButton slot='end'>
+          
+          <div className='flex' ><IonIcon size='large' icon={bag} />3</div>
+          
+      </IonButton>
             <IonTitle size="large">{title}</IonTitle>
           </IonToolbar>
         </IonHeader>
@@ -33,6 +43,19 @@ const NativeWrapper = ({ title, content }) => {
       
         {content}
       </IonContent>
+      <IonFooter>
+        <IonToolbar>
+       {title === 'Order'
+        ? null
+        : <IonButton expand="block" >
+        <span className='text-xl' >Add to Cart</span>
+        </IonButton>
+       }
+      
+
+          
+        </IonToolbar>
+      </IonFooter>
     </IonPage>
   );
 };

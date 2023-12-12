@@ -44,19 +44,33 @@ const ModalItem = (handleChoice, amount, item) => {
   )
 }
 
-const AmountSelector = ({handleChoice, item, amount}) => {
-  console.log(amount)
+const AmountSelector = ({modalData, handleChoice, item, amount}) => {
+
+  const [customizationContext, dispatch] = useContext(CustomizationContext)
+
+  console.log(modalData)
   console.log(item)
 
+  const constuctChoice = (amount) => {
+    const name = modalData.name
+    const selection = item
+    const payload = {name, selection, amount}
+    console.log(payload)
+    dispatch({type: name, payload})
+    console.log(item)
+    console.log('clicked test choice')
+  }
   if(!amount) return null
 
   return (
-    <IonSelect justify="start" label={item} placeholder="amount">
+    <IonItem>
+    <IonSelect onIonChange={(e) => constuctChoice(e.detail.value)} className='px-2' interface="popover" justify="start" label={item.name} placeholder="amount">
       {amount.map(option => {
         console.log(amount)
-         return <IonSelectOption onClick={() =>handleChoice()} value={option}>{option}</IonSelectOption>
+         return <IonSelectOption key={option} value={option}>{option}</IonSelectOption>
       })}
         </IonSelect>
+        </IonItem>
   )
 }
 
@@ -69,6 +83,7 @@ const CustomizationModal = (({ setIsOpen, modalData}) => {
 
   const handleChoice = (selection) => {
     // setCustomization(selection)
+    console.log(selection)
     const name = modalData.name
     const payload = {name, selection}
     dispatch({type: name, payload})
@@ -91,7 +106,7 @@ const CustomizationModal = (({ setIsOpen, modalData}) => {
       {modalData.selection.map(item => { 
         return modalData.amount.length === 0
         ? <IonItem onClick={() => handleChoice(item)} key={item}><IonLabel>{item}</IonLabel></IonItem >
-        : <IonItem onClick={() => handleChoice(item)} key={item}><IonLabel>{item}</IonLabel></IonItem >
+        : <IonItem key={item}><IonLabel>{item}</IonLabel><AmountSelector modalData={modalData} handleChoice={handleChoice} amount={modalData.amount} item={item} /></IonItem>
       })}
      </IonList>
        
