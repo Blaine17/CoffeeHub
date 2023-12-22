@@ -26,10 +26,13 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import './theme/tailwind.css';
 import NativeWrapper from './pages/NativeWrapper';
+import CartPage from './pages/CartPage'
+import { OrderContextProvider } from './store/OrderContext';
 
 setupIonicReact();
 
 const App = () => (
+  <OrderContextProvider>
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
@@ -40,11 +43,15 @@ const App = () => (
           <Redirect to="/home" />
         </Route>
         <Route exact path="/product/:id">
-          <NativeWrapper title={null}content={<ItemPage/>}/>
+          <NativeWrapper title={null} content={<ItemPage/>}/>
+        </Route>
+        <Route exact path='/cart'>
+          <NativeWrapper title={'Cart'} content={<CartPage/>}/>
         </Route>
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>
+  </OrderContextProvider>
 );
 
 export default App;

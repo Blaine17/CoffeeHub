@@ -31,7 +31,7 @@ productsRouter.get('/:name', async (request, response) => {
 
     const product = await Menu.productSchema.findOne({ name })
     await product.populate('customizations')
-    // console.log(product)
+  
   response.json(product)
 })
 

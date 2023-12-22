@@ -31,13 +31,18 @@ categorySchema.set('toJSON', {
 const assestsSchema = new mongoose.Schema({
   imgUrl: String
 })
+const customizationSelectionSchema = new mongoose.Schema({
+  name: String,
+  priceMod: Number
+})
 
 const productSchema = new mongoose.Schema({
   displayOrder: Number,
   name: String,
   availability: Boolean,
-  assests: {type: assestsSchema},
+  assests: assestsSchema,
   customizations: [{type: mongoose.Schema.Types.ObjectId, ref: 'Customization'}],
+  amount: String 
 })
 
 productSchema.set('toJSON', {
@@ -50,7 +55,7 @@ productSchema.set('toJSON', {
 
 const customizationSchema = new mongoose.Schema({
   name: String,
-  selection: [String],
+  selection: [customizationSelectionSchema],
   amount: [String]
 })
 

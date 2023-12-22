@@ -3,8 +3,7 @@ import {
 } from "react-router-dom"
 
 const MenuItem = ({ item }) => {
-  console.log(item)
-  console.log(item.assests.imgUrl)
+
   return (
     
     <li> 
