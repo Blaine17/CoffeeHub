@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 // import menuItems from "./menuItems";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import menuService from "../services/menu";
@@ -73,16 +73,19 @@ const AddToCartButton = ({ basePrice, name, id }) => {
     console.log(customizations)
     const payload = { name, customizations, basePrice, id };
     console.log(payload)
-    dispatchOrder(saveOrderLocaly({ type: "ADD", payload }));
+    dispatchOrder(saveOrderLocaly(payload));
 
   };
+
+  const history = useHistory();
 
   const handleUpdateOrder = () => {
     const customizations = customizationContext;
     console.log(customizations)
     const payload = { name, customizations, basePrice, id };
     console.log(payload)
-    dispatchOrder(updateOrderLocaly({ type: "UPDATE", payload }, orderIndex))
+    dispatchOrder(updateOrderLocaly(payload, orderIndex))
+    history.push("/cart")
     // dispatchOrder(saveOrderLocaly({ type: "ADD", payload }));
 
   };
@@ -91,12 +94,23 @@ const AddToCartButton = ({ basePrice, name, id }) => {
 if (urlParams.get('cart')) {
   return (
     <IonFab slot="fixed" vertical="bottom" horizontal="end">
+      <div className='grid place-items-end gap-2'>
+      {/* <IonButton
+        onClick={() => history.push("/cart")}
+        className="shadow-2xl drop-shadow-2xl font-bold text-base"
+        color="light"
+        size='small'
+      >
+        {'Return to Order'}
+      </IonButton> */}
+      <button  onClick={() => history.push("/cart")} className="bg-slate-50 hover:bg-gray-400 drop-shadow-2xl	shadow-2xl text-gray-800 font-bold py-2 px-4 rounded-full outline outline-1 outline-slate-300">Return To Order</button>
       <IonButton
         onClick={() => handleUpdateOrder()}
-        className="shadow-2xl font-bold text-base"
+        className="shadow-2xl drop-shadow-2xl font-bold text-base"
       >
         {`$${price} UPDATE ORDER`}
       </IonButton>
+      </div>
     </IonFab>
   )
 } else{

@@ -1,6 +1,8 @@
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
+import { IonApp, IonRouterOutlet, setupIonicReact, IonTabBar, IonTabButton, IonLabel, IonFooter, IonToolbar, IonTabs, IonIcon } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
+import { bag, cafeOutline, personCircleOutline } from "ionicons/icons";
+
 import Home from './pages/Home';
 import ItemPage from './pages/ItemPage'
 import Menu from './pages/Menu'
@@ -35,6 +37,7 @@ const App = () => (
   <OrderContextProvider>
   <IonApp>
     <IonReactRouter>
+      <IonTabs>
       <IonRouterOutlet>
         <Route exact path="/home">
         <NativeWrapper title={'Order'} content={<Menu/>}/>
@@ -48,7 +51,33 @@ const App = () => (
         <Route exact path='/cart'>
           <NativeWrapper title={'Cart'} content={<CartPage/>}/>
         </Route>
+        <Route exact path='/account'>
+          <NativeWrapper title={'Cart'} content={<div>account info goes here </div>}/>
+        </Route>
       </IonRouterOutlet>
+
+     
+
+       
+      <IonTabBar className='pt-1' slot="bottom">
+          <IonTabButton tab="cart" href="/cart">
+          <IonIcon icon={bag} />
+            <IonLabel className='text-base'>Cart</IonLabel>
+          </IonTabButton>
+
+          <IonTabButton tab="home" href="/home">
+          <IonIcon icon={cafeOutline} />
+            <IonLabel className='text-base'>Order</IonLabel>
+          </IonTabButton>
+
+          <IonTabButton tab="account" href="/account">
+          <IonIcon icon={personCircleOutline} />
+            <IonLabel className='text-base'>Account</IonLabel>
+          </IonTabButton>
+
+          
+        </IonTabBar>
+       </IonTabs>
     </IonReactRouter>
   </IonApp>
   </OrderContextProvider>

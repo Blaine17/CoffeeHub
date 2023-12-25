@@ -62,12 +62,6 @@ const ItemPage = ({ match }) => {
   // const [orderContext, dispatchOrder] = useContext(OrderContext)
   // // const [customizationContext, dispatch] = useContext(CustomizationContext)
 
-
-  console.log(id)
-
-  
-
-
   const query = useQuery({
     queryKey: [id],
     queryFn: () => menuService.getProduct(id),
@@ -97,7 +91,6 @@ const ItemPage = ({ match }) => {
 
       <CustomizationContextProvider>
         <SizeSelection productSizes={product.sizes} />
-
         <AddToOrderButton basePrice={product.basePrice} name={product.name} id={product.id}/>
         <div className="m-4 text-left text-xl font-bold">Customizations</div>
         {product.customizations.map((customization) => {

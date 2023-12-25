@@ -1,3 +1,4 @@
+import { remove } from 'ionicons/icons'
 import { createContext, useReducer, useEffect, useState } from 'react'
 
 const orderReducer = (state, action) => {
@@ -11,9 +12,17 @@ const orderReducer = (state, action) => {
     case 'ADD':
       return state.concat(action.payload)
     case 'REMOVE':
-      return state
+      return state.filter((item, index) => index !== action.payload)
     case 'UPDATE':
-      return action.payload
+      console.log(action.payload.orderIndex)
+      console.log()
+      const temp = state.map((item, index) => {
+        return index === action.payload.orderIndex
+        ? action.payload.updatedItem
+        : item 
+      })
+      console.log(temp)      
+      return temp
     default:
       return state
   }
@@ -43,29 +52,47 @@ export const OrderContextProvider = (props) => {
 
 export default OrderContext
 
-export const saveOrderLocaly = (action) => {
+export const saveOrderLocaly = (payload) => {
   console.log('in action handler')
   const orderListJSON = window.localStorage.getItem('orderList')
   //add to local storage if none, else initialize local storage
   if (orderListJSON) {
     const orderList = JSON.parse(orderListJSON)
     console.log(orderList)
-    const updatedOrderList = orderList.concat(action.payload)
+    const updatedOrderList = orderList.concat(payload)
     console.log(updatedOrderList)
     window.localStorage.setItem('orderList', JSON.stringify(updatedOrderList))
   } else (
-    window.localStorage.setItem('orderList', JSON.stringify([action.payload]))
+    window.localStorage.setItem('orderList', JSON.stringify([payload]))
   )
-  return action
+  return { type: "ADD", payload }
 }
 
-export const updateOrderLocaly = (action, orderIndex) => {
-  console.log('in action handler')
+export const updateOrderLocaly = (payload, orderIndex) => {
   const orderListJSON = window.localStorage.getItem('orderList')
   //add to local storage if none, else initialize local storage
   const orderList = JSON.parse(orderListJSON)
+  console.log(orderList.indexOf(payload))
   const updatedOrderList = [...orderList]
-  updatedOrderList[orderIndex] = action.payload
+  updatedOrderList[orderIndex] = payload
+  window.localStorage.setItem('orderList', JSON.stringify(updatedOrderList))
   console.log(updatedOrderList)
-  return {type: 'UPDATE', payload: updatedOrderList}
+  return {type: 'UPDATE', payload: {updatedItem: payload, orderIndex}}
+}
+
+export const removeOrderLocaly = (action, orderIndex) => {
+  console.log(orderIndex)
+
+  const orderListJSON = window.localStorage.getItem('orderList')
+  //add to local storage if none, else initialize local storage
+  const orderList = JSON.parse(orderListJSON)
+
+  const removedOrderList = orderList.filter((item, index) => index !== orderIndex)
+  // const removedOrderList = orderList.slice(0, orderIndex).concat(orderList.slice(orderIndex + 1))
+  window.localStorage.setItem('orderList', JSON.stringify(removedOrderList))
+
+  console.log(orderList)
+  // console.log(temp)
+  return {type: 'REMOVE', payload: orderIndex}
+
 }

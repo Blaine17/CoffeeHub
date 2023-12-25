@@ -9,6 +9,8 @@ import CustomizationButton from "../components/CustomizationButton";
 import AddToOrderButton from "../components/AddToOrderButton";
 import SizeSelection from "../components/SizeSelection";
 import CompleteOrderButton from '../components/CompleteOrderButton'
+import { createOutline, addCircleOutline, removeCircleOutline } from "ionicons/icons";
+
 
 import {
   IonContent,
@@ -46,10 +48,49 @@ import {
   useReducer,
   useContext
 } from "react";
-import OrderContext from "../store/OrderContext";
+import  OrderContext, {saveOrderLocaly, removeOrderLocaly} from "../store/OrderContext";
 import { calculateCustomizedPrice } from "../helpers/priceHelper";
 
-const OrderItemContainer = ({item, i}) => {
+const ModificationBar = ({ index }) => {
+
+  const [orderContext, dispatch] = useContext(OrderContext)
+
+  const handleIncrementQuatity = (index, e) => {
+    e.preventDefault()
+    dispatch(saveOrderLocaly(orderContext[index]))
+    console.log('incremented')
+  }
+
+  const handleDecrementQuantity = (index, e) => {
+    e.preventDefault()
+    const action = 0
+    dispatch(removeOrderLocaly(action, index))
+    console.log('decremented')
+    // dispatch(saveOrderLocaly({type: 'ADD', payload:orderContext[index]}))
+    
+  }
+
+
+
+  return (
+    <div className='pt-1'>
+  <IonIcon
+    className={`pr-1 text-center self-end inline-block text-2xl`}
+    icon={addCircleOutline}
+    color={"secondary"}
+    onClick={(e) => handleIncrementQuatity(index, e)}
+  ></IonIcon>
+  <IonIcon
+    className={`text-center self-end inline-block text-2xl`}
+    icon={removeCircleOutline}
+    color={"secondary"}
+    onClick={(e) => handleDecrementQuantity(index, e)}
+  ></IonIcon>
+  </div>
+  )
+}
+
+const OrderItemContainer = ({ item, i }) => {
 
   const query = useQuery({
     queryKey: [item.name],
@@ -61,22 +102,23 @@ const OrderItemContainer = ({item, i}) => {
 
   const itemTotal = calculateCustomizedPrice(item.customizations, item.basePrice)
 
-
- 
-
   return (
     <IonItem >
-      <Link to={`/product/${item.name}?cart=True&index=${i}`}>
-      <div className='grid grid-cols-4 w-full gap-2 my-4'>
+      <Link  className='w-full' to={`/product/${item.name}?cart=True&index=${i}`}>
+      <div className='grid grid-cols-4 w-full gap-2 mt-4'>
         <div className='col-span-1'><img
-          className="rounded-full object-center"
+          className="rounded-full object-center "
           width="75"
           height="75"
           src={query.data.assests.imgUrl}/></div>
           
         <div className='col-span-3'>
-       <div className='grid grid-cols-4'><div className='col-span-3 text-xl font-bold'>{item.name}</div><div className='col-span-1 font-bold text-right'>{`$${itemTotal}`}</div></div>
-       <CustomizationList customizations={item.customizations} />
+          <div className="grid grid-cols-4">
+            <div className="col-span-3 font-bold">{item.name}</div>
+            <div className="col-span-1 justify-self-end font-bold w-auto">{`$${itemTotal}`}</div>
+            </div>
+       <CustomizationList customizations={item.customizations}/>
+       <ModificationBar index={i}/>
        </div>
        </div>
        </Link>
@@ -97,9 +139,12 @@ const CustomizationList = ({customizations}) => {
     )
   })
   return (
+   
   <ul >
     {modificationList}
   </ul>
+ 
+  
   )
 }
 

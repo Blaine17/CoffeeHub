@@ -14,10 +14,14 @@ import {
   IonTabs,
   IonTabBar,
   IonTabButton,
+  IonLabel,
+  IonRouterOutlet,
 } from "@ionic/react";
 import "./Home.css";
+import { IonReactRouter } from '@ionic/react-router';
 
-import { bag } from "ionicons/icons";
+
+import { bag, cafeOutline } from "ionicons/icons";
 
 import Menu from "./Menu";
 import { OrderContextProvider } from "../store/OrderContext";
@@ -26,6 +30,9 @@ import { useContext, useState } from "react";
 import {
   Link,
 } from "react-router-dom"
+import {Route} from 'react-router'
+import ItemPage from "./ItemPage";
+import CartPage from "./CartPage";
 
 // might be able to implement this native wrapper using props.chilren
 const NativeWrapper = ({ title, content }) => {
@@ -49,11 +56,7 @@ const NativeWrapper = ({ title, content }) => {
           <IonTitle size="large">{title}</IonTitle>
         </IonToolbar>
       </IonHeader>
-
-      <IonContent fullscreen>{content}</IonContent>
-      <IonFooter>
-        <IonToolbar></IonToolbar>
-      </IonFooter>
+      <IonContent>{content}</IonContent>
     </IonPage>
   );
 };

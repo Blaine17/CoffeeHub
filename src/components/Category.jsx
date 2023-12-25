@@ -4,7 +4,7 @@ const Category = ({ products }) => {
   
   return (
   //  
-  <ul className="m-4">
+  <ul>
       {products.map((item) => {
         return <MenuItem key={item.id} item={item} />
 })}

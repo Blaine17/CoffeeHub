@@ -29,7 +29,7 @@ const Menu = () => {
 
 
   return (
-    <div className="m-4">
+    <div className="m-1">
       {items.map((item) => (
         <Category key={item.id} products={item.products} />
       ))}

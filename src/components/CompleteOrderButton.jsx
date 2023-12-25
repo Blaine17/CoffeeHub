@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 // import menuItems from "./menuItems";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import menuService from "../services/menu";
@@ -62,17 +62,22 @@ const AddToOrderButton = ({ basePrice, name, id }) => {
     return sum + calculateCustomizedPrice(item.customizations, item.basePrice)
   }, 0)
 
+  const history = useHistory()
+
   const subTotal = subTotalPrice(orderContext)
   const total = afterTax(subTotal)
 
   return (
   
     <IonFab slot="fixed" vertical="bottom" horizontal="end">
+      <div className='grid place-items-end gap-2'>
+      <button  onClick={() => history.push('/')} className="bg-slate-50 hover:bg-gray-400 drop-shadow-2xl	shadow-2xl text-gray-800 font-bold py-2 px-4 rounded-full outline outline-1 outline-slate-300">Continue Shopping</button>
       <IonButton
         className="shadow-2xl font-bold text-base"
       >
         {`$${total.toFixed(2)} Complete Order`}
       </IonButton>
+      </div>
     </IonFab>
   
   );
