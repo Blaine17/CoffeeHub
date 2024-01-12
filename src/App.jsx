@@ -30,10 +30,14 @@ import './theme/tailwind.css';
 import NativeWrapper from './pages/NativeWrapper';
 import CartPage from './pages/CartPage'
 import { OrderContextProvider } from './store/OrderContext';
+import { UserContextProvider } from './store/UserContext';
+import UserPage from './pages/UserPage';
+import AccountWrapper from './pages/AccountWrapper';
 
 setupIonicReact();
 
 const App = () => (
+  <UserContextProvider>
   <OrderContextProvider>
   <IonApp>
     <IonReactRouter>
@@ -52,14 +56,14 @@ const App = () => (
           <NativeWrapper title={'Cart'} content={<CartPage/>}/>
         </Route>
         <Route exact path='/account'>
-          <NativeWrapper title={'Cart'} content={<div>account info goes here </div>}/>
+          <NativeWrapper title={'Cart'} content={<AccountWrapper/>}/>
         </Route>
       </IonRouterOutlet>
 
      
 
        
-      <IonTabBar className='pt-1' slot="bottom">
+      <IonTabBar id='tabBar' className='pt-1' slot="bottom">
           <IonTabButton tab="cart" href="/cart">
           <IonIcon icon={bag} />
             <IonLabel className='text-base'>Cart</IonLabel>
@@ -81,6 +85,7 @@ const App = () => (
     </IonReactRouter>
   </IonApp>
   </OrderContextProvider>
+  </UserContextProvider>
 );
 
 export default App;

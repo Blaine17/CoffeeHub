@@ -1,0 +1,28 @@
+### register
+POST http://localhost:3000/api/users 
+content-type: application/json
+
+{
+ "email": "test@test.com", "firstName": "Matti", "lastName": "Luukainen", "password": "ThisIsASecurePassword1$", "confirmPassword": "ThisIsASecurePassword1$"
+}
+
+### login
+POST http://localhost:3000/api/login 
+content-type: application/json
+
+{
+"email": "test@test.com", "password": "ThisIsASecurePassword1$"
+}
+
+### 
+GET http://localhost:3000/api/products
+
+
+###
+GET http://localhost:3000/api/protected HTTP/1.1 
+content-type: application/json 
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1OTJlMmJiNzFlNjJmNWM3YmRkYTc0MiIsImlhdCI6MTcwNTAyMzU4NSwiZXhwIjoxNzA1MDIzNjQ1fQ.nErfx034FX3uRfZXMT13LWkSsOe9eIeNfiNqslv1QZs
+Refresh-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1OTJlMmJiNzFlNjJmNWM3YmRkYTc0MiIsImlhdCI6MTcwNTAyNDE3NywiZXhwIjoxNzA1MDI3Nzc3fQ.nO-k434EwfYk_j4CGWg2kJDdqf8hOl08bqzBkiQyx2c
+
+### ad to database
+GET http://localhost:3000/api/users
