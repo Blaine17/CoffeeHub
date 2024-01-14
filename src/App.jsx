@@ -31,6 +31,8 @@ import NativeWrapper from './pages/NativeWrapper';
 import CartPage from './pages/CartPage'
 import { OrderContextProvider } from './store/OrderContext';
 import { UserContextProvider } from './store/UserContext';
+import { NotificationContextProvider } from './store/UserContext';
+
 import UserPage from './pages/UserPage';
 import AccountWrapper from './pages/AccountWrapper';
 import test from './services/test';
@@ -41,12 +43,13 @@ setupIonicReact();
 const App = () => (
   <UserContextProvider>
   <OrderContextProvider>
+  <NotificationContextProvider>
   <IonApp>
     <IonReactRouter>
       <IonTabs>
       <IonRouterOutlet>
         <Route exact path="/home">
-        <NativeWrapper title={'Order'} content={<Menu/>}/>
+          <NativeWrapper title={'Order'} content={<Menu/>}/>
         </Route>
         <Route exact path="/">
           <Redirect to="/home" />
@@ -54,17 +57,19 @@ const App = () => (
         <Route exact path="/product/:id">
           <NativeWrapper title={null} content={<ItemPage/>}/>
         </Route>
-        <ProtectedRoute>
-                  <NativeWrapper title={'Cart'} content={<CartPage/>}/>
-                </ProtectedRoute>
+        <Route exact path="/cart" >
+          <ProtectedRoute>
+            <NativeWrapper title={'Cart'} content={<CartPage/>}/>
+          </ProtectedRoute>
+        </Route>
         <Route exact path='/account'>
           <>
-          <NativeWrapper title={'Cart'} content={<AccountWrapper/>}/>
+          <NativeWrapper title={'Account'} content={<AccountWrapper/>}/>
           </>
         </Route>
       </IonRouterOutlet>
 
-     
+   
 
        
       <IonTabBar id='tabBar' className='pt-1' slot="bottom">
@@ -88,6 +93,7 @@ const App = () => (
        </IonTabs>
     </IonReactRouter>
   </IonApp>
+  </NotificationContextProvider>
   </OrderContextProvider>
   </UserContextProvider>
 );

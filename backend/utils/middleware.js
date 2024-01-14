@@ -114,8 +114,8 @@ const verifyRefreshToken = async (refreshToken, next) => {
 }
 
 const generateAccessToken = async (user, response) => {
-  const accessToken = jwt.sign(user, config.SECRET, {expiresIn: 5})
-  const refreshToken = jwt.sign(user, config.SECRET, {expiresIn: 5})
+  const accessToken = jwt.sign(user, config.SECRET, {expiresIn: config.ACCESSTIME})
+  const refreshToken = jwt.sign(user, config.SECRET, {expiresIn: config.REFRESHTIME})
   const temp = await User.findByIdAndUpdate(user._id, {refreshToken} )
   response.setHeader('access-token', `${accessToken}`);
   response.setHeader('refresh-token', `${refreshToken}`);

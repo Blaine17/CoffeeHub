@@ -106,7 +106,7 @@ const AccountWrapper = () => {
   //     //logout user
   //   })
   // }, [])
-  console.log(user === true)
+  console.log(user)
 
 return (
   <>

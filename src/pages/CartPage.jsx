@@ -163,16 +163,7 @@ const CartPage = ({ match }) => {
   // }
   // authenticate(user, callback, removeUser)
 
-  // console.log(user)
-  // if (!user) {
-  //   return (
-  //     <>
-  //     <div>Sign in to view your cart</div>
-  //      <AccountWrapper/>
-  //     </>
-   
-  //   )
-  // }
+  
   return (
     <>
     <IonList>

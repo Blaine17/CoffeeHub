@@ -15,6 +15,9 @@ const ProtectedRoute = ({ children }) => {
       }
       authenticate(user, callback, removeUser)
 
+      console.log(!user)
+      console.log('hello')
+
     if (!user) {
         // Redirect to login page if not logged in
         return <Redirect to="/account" />;

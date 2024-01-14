@@ -140,14 +140,14 @@ const LoginPage = ({  }) => {
     <IonList>
       <IonItem>
         <IonInput 
-        type="email" placeholder="email@example.com" onIonInput={email.onChange}></IonInput>
+        name='email' type="email" placeholder="email@example.com" onIonInput={email.onChange}></IonInput>
       </IonItem>
 
       <IonItem>
-        <IonInput onIonInput={password.onChange} placeholder="Password" type="password"></IonInput>
+        <IonInput name='password' onIonInput={password.onChange} placeholder="Password" type="password"></IonInput>
       </IonItem>
     </IonList>
-    <IonButton  type="submit" className='pt-1' size='default' expand="block">Login</IonButton>
+    <IonButton id='login' type="submit" className='pt-1' size='default' expand="block">Login</IonButton>
     </form>
     </IonCard>
     <IonToast  positionAnchor="tabBar" {...toastComponent}></IonToast>
