@@ -10,7 +10,9 @@ import AddToOrderButton from "../components/AddToOrderButton";
 import SizeSelection from "../components/SizeSelection";
 import CompleteOrderButton from '../components/CompleteOrderButton'
 import { createOutline, addCircleOutline, removeCircleOutline } from "ionicons/icons";
-
+import authenticate from "../hooks/authenticate";
+import UserContext, {removeUserLocally, saveUserLocally} from "../store/UserContext";
+import AccountWrapper from "./AccountWrapper";
 
 import {
   IonContent,
@@ -150,7 +152,27 @@ const CustomizationList = ({customizations}) => {
 
 const CartPage = ({ match }) => {
   const [orderContext, dispatch] = useContext(OrderContext)
+  const [user, userDispatch] = useContext(UserContext)
   
+  // const callback = function (authenticatedUser) {
+  //   return userDispatch(saveUserLocally(authenticatedUser))
+  // }
+
+  // const removeUser = function (authenticatedUser) {
+  //   return userDispatch(removeUserLocally())
+  // }
+  // authenticate(user, callback, removeUser)
+
+  // console.log(user)
+  // if (!user) {
+  //   return (
+  //     <>
+  //     <div>Sign in to view your cart</div>
+  //      <AccountWrapper/>
+  //     </>
+   
+  //   )
+  // }
   return (
     <>
     <IonList>

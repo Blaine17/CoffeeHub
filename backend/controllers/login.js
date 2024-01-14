@@ -30,14 +30,14 @@ loginRouter.post('/', loginValidator, async (request, response) => {
  
 
    
-
+  //error here no username
   const userForToken = {
     username: user.username,
     id: user._id,
   }
 
-  const token = jwt.sign(userForToken, config.SECRET, {expiresIn: 60})
-  const refreshTokens = jwt.sign(userForToken, config.SECRET, {expiresIn: 60*60})
+  const accessToken = jwt.sign(userForToken, config.SECRET, {expiresIn: 60})
+  const refreshTokens = jwt.sign(userForToken, config.SECRET, {expiresIn: '1h'})
   console.log('user is here', user)
 
   // const findRefreshToken = async () => {
@@ -45,11 +45,13 @@ loginRouter.post('/', loginValidator, async (request, response) => {
 
   //   return temp
   // }
-  const temp =  await User.findByIdAndUpdate(user._id, {refreshTokens} )
+  await User.findByIdAndUpdate(user._id, {refreshTokens} )
 
-  console.log('refresh',temp)
+ 
 
-  response.status(200).send({token, refreshTokens, username: user.username, firstName: user.firstName, lastName: user.lastName})
+
+  response.status(200).send({accessToken, refreshTokens, username: user.username, firstName: user.firstName, lastName: user.lastName})
 })
+
 
 module.exports = loginRouter

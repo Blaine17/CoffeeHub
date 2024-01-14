@@ -2,11 +2,11 @@ import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact, IonTabBar, IonTabButton, IonLabel, IonFooter, IonToolbar, IonTabs, IonIcon } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { bag, cafeOutline, personCircleOutline } from "ionicons/icons";
-
+import ProtectedRoute from './pages/ProtectedRoute';
 import Home from './pages/Home';
 import ItemPage from './pages/ItemPage'
 import Menu from './pages/Menu'
-import Test from './pages/Test'
+import Test from './pages/ProtectedRoute'
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -33,6 +33,8 @@ import { OrderContextProvider } from './store/OrderContext';
 import { UserContextProvider } from './store/UserContext';
 import UserPage from './pages/UserPage';
 import AccountWrapper from './pages/AccountWrapper';
+import test from './services/test';
+
 
 setupIonicReact();
 
@@ -52,11 +54,13 @@ const App = () => (
         <Route exact path="/product/:id">
           <NativeWrapper title={null} content={<ItemPage/>}/>
         </Route>
-        <Route exact path='/cart'>
-          <NativeWrapper title={'Cart'} content={<CartPage/>}/>
-        </Route>
+        <ProtectedRoute>
+                  <NativeWrapper title={'Cart'} content={<CartPage/>}/>
+                </ProtectedRoute>
         <Route exact path='/account'>
+          <>
           <NativeWrapper title={'Cart'} content={<AccountWrapper/>}/>
+          </>
         </Route>
       </IonRouterOutlet>
 

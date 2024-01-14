@@ -58,7 +58,10 @@ import {
 
 import  OrderContext, {saveOrderLocaly, removeOrderLocaly} from "../store/OrderContext";
 import { calculateCustomizedPrice } from "../helpers/priceHelper";
-import UserContext, {removeUserLocally} from "../store/UserContext";
+import UserContext, {removeUserLocally, saveUserLocally} from "../store/UserContext";
+import Protected from "./Protected";
+import test from "../services/test";
+import authenticate from "../hooks/authenticate";
 
 const UserDetails = ({ user, userDispatch }) => {
 
@@ -77,6 +80,7 @@ const UserDetails = ({ user, userDispatch }) => {
   })
 
     }
+    <Protected/>
     <button onClick={handleLogout}>Logout</button>
     </>
   )
@@ -85,6 +89,23 @@ const UserDetails = ({ user, userDispatch }) => {
 const AccountWrapper = () => {
   const [user, userDispatch] = useContext(UserContext)
 
+  const callback = function (authenticatedUser) {
+    return userDispatch(saveUserLocally(authenticatedUser))
+  }
+
+  const removeUser = function (authenticatedUser) {
+    return userDispatch(removeUserLocally())
+  }
+  authenticate(user, callback, removeUser)
+
+  // currently only checks session is page refreshed
+  // useEffect(() => {
+  //   test.test(user, callback).catch(error => {
+  //     console.log(error.message)
+  //     userDispatch(removeUserLocally())
+  //     //logout user
+  //   })
+  // }, [])
   console.log(user === true)
 
 return (

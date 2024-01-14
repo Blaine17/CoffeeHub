@@ -2,6 +2,8 @@ const logger = require('./logger')
 const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
+const config = require('../utils/config')
+
 
 const requestLogger = (request, response, next) => {
   logger.info('Method:', request.method)
@@ -62,7 +64,7 @@ const loginValidator = async (request, response, next) => {
 }
 
 const errorHandler = (error, request, response, next) => {
-  logger.error('lne 19', error)
+  logger.error('lne 19', error.name)
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformated id'})
@@ -70,8 +72,10 @@ const errorHandler = (error, request, response, next) => {
     return response.status(400).json({ error: error.message })
   } else if (error.name === 'JsonWebTokenError') {
     return response.status(400).json({ error: 'token missing or invalid'})
-  } else if (error.name = 'PasswrodError') {
+  } else if (error.name === 'PasswordError') {
     return response.status(400).json(error.message)
+  } else if (error.name === 'refreshTokenError') {
+    return response.status(401).json({error: error.message})
   }
 
   next(error)
@@ -79,9 +83,8 @@ const errorHandler = (error, request, response, next) => {
 
 //takes token from headers
 const getTokenFrom = (request) => {
-  console.log('getTokenFrom')
-  const authorization = request.get('authorization')
-  
+  const authorization = request.get('Authorization')
+  console.log(authorization)
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     return authorization.substring(7)
   }
@@ -97,36 +100,64 @@ const tokenExtractor = (request, response, next) => {
 const verifyAccessToken = async (token, next) => {
   const decodedToken = jwt.verify(token, process.env.SECRET);
   if (!decodedToken.id) {
-    throw new Error('Token invalid');
+    const error = Error("JsonWebTokenError")
+    error.name = 'JsonWebTokenError'
+    next(error)
   }
   return decodedToken;
 }
 
 const verifyRefreshToken = async (refreshToken, next) => {
   const decodedToken = jwt.verify(refreshToken, process.env.SECRET);
+  console.log(refreshToken, decodedToken)
   return decodedToken;
+}
+
+const generateAccessToken = async (user, response) => {
+  const accessToken = jwt.sign(user, config.SECRET, {expiresIn: 5})
+  const refreshToken = jwt.sign(user, config.SECRET, {expiresIn: 5})
+  const temp = await User.findByIdAndUpdate(user._id, {refreshToken} )
+  response.setHeader('access-token', `${accessToken}`);
+  response.setHeader('refresh-token', `${refreshToken}`);
 }
 
 //validates token and adds user to response header
 const userExtractor = async (request, response, next) => {
   const accessToken = getTokenFrom(request);
-
+  console.log(accessToken)
   if (accessToken) {
     try {
       const decodedToken = await verifyAccessToken(accessToken);
       request.user = await User.findById(decodedToken.id);
       return next();
     } catch (accessTokenError) {
-      console.log('accesstokenexpired')
-      const refreshToken = request.get('Refresh-Token');
+      console.log('access token expired')
+      const refreshToken = request.get('RefreshToken');
 
       try {
         const decodedRefreshToken = await verifyRefreshToken(refreshToken);
-        request.user = await User.findById(decodedRefreshToken.id);
-        return next();
+        const user = await User.findById(decodedRefreshToken.id);
+        request.user = user
+        // update token 
+        const userForToken = {
+          username: user.email,
+          id: user._id,
+        }
+       ; // Output: true or false
+       const error = Error("Access token expired")
+        error.name = 'refreshTokenError'
+      
+      await generateAccessToken(userForToken, response)
+       
+        
+        return next(error)
       } catch (refreshTokenError) {
-        console.log('refreshTokenExpired')
-        next(accessTokenError)
+        console.log('refresh expired')
+        // throw new Error('refreshTokenExpired');
+        const error = Error("Refresh token expired")
+        error.name = 'refreshTokenError'
+      
+        return next(error)
       }
     }
   }
@@ -135,14 +166,6 @@ const userExtractor = async (request, response, next) => {
 
 }
 
-const userNullCheck = (req, res, next) => {
-  // const user = req.user;
-
-  // if (!user) {
-  //   return res.status(401).json({ error: 'User not authenticated' });
-  // }
-  next()
-};
 
 module.exports = {
   requestLogger,
@@ -152,5 +175,4 @@ module.exports = {
   userExtractor,
   registerValidator,
   loginValidator,
-  userNullCheck
 }
