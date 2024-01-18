@@ -3,6 +3,7 @@ import { createContext, useReducer, useEffect } from "react";
 import loginService from '../services/login'
 
 const reducer = (state, action) => {
+  console.log(action)
   if (action.type === 'HYDRATE') {
     return action.payload
   }

@@ -6,19 +6,23 @@ import {
   useEffect,
   createContext,
   useReducer,
-  useContext
+  useContext,
 } from "react";
 
-import test from "../services/test";
+import { useLocation } from "react-router-dom";
 
-
+import authenticateUser from "../services/authenticate";
 
 export const authenticate = (user, callback, removeUser) => {
-  useEffect(() => {
-    test.test(user, callback).catch(error => {
-      removeUser()
-    })
-  }, [])
-}
+  const location = useLocation();
 
-export default authenticate
+  useEffect(() => {
+    console.log(location);
+    authenticateUser.authenticateUser(user, callback).catch((error) => {
+      //if there was an error authenticating user log user out
+      removeUser();
+    });
+  }, [location]);
+};
+
+export default authenticate;

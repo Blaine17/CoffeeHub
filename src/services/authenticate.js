@@ -1,7 +1,7 @@
 import axios from 'axios'
 const BaseUrl = 'http://localhost:3000/api/protected'
 
-const test = async (credentials, userDispath) => {
+const authenticateUser = async (credentials, userDispath) => {
   console.log(credentials)
   const response = await axios.get(BaseUrl, {
     headers: {
@@ -13,12 +13,9 @@ const test = async (credentials, userDispath) => {
     return true
   })
   .catch(error => {
-    console.log(error.response.data.error === 'Access token expired')
+    console.log(error.response.data.error)
     if (error.response.data.error === 'Access token expired') {
-      console.log(error)
-      console.log(error.response.headers['access-token'])
-      console.log(error.response.headers['refresh-token'])
-      console.log(credentials)
+      
       const refreshTokens = error.response.headers['refresh-token']
       const accessToken = error.response.headers['access-token']
       const authenticatedUser = {...credentials,
@@ -30,9 +27,8 @@ const test = async (credentials, userDispath) => {
     } 
     console.log(error.response.data.error)
     throw Error(error.response.data.error)
-    return error.response.data.error
   })
   return response
 }
 
-export default { test }
+export default { authenticateUser }

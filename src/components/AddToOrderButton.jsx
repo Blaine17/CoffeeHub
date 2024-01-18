@@ -49,11 +49,17 @@ import {
   useContext,
 } from "react";
 import OrderContext from "../store/OrderContext";
+import UserContext from "../store/UserContext";
+import { useNotifier } from "../store/notificationContext";
 
 const AddToCartButton = ({ basePrice, name, id }) => {
   const [customizationContext, dispatchCustomization] =
     useContext(CustomizationContext);
   const [orderContext, dispatchOrder] = useContext(OrderContext);
+  const [userContext ,] = useContext(UserContext)
+  console.log(userContext)
+  const notifyWith = useNotifier()
+
 
   const urlParams = new URLSearchParams(window.location.search);
   const inCart = urlParams.get('cart')
@@ -69,11 +75,17 @@ const AddToCartButton = ({ basePrice, name, id }) => {
   };
 
   const handleAddToOrder = () => {
+    //check is user is logged in to add to cart
+    if(!userContext) {
+      notifyWith('Sign in to add to cart')
+      return 
+    }
     const customizations = customizationContext;
     console.log(customizations)
     const payload = { name, customizations, basePrice, id };
     console.log(payload)
     dispatchOrder(saveOrderLocaly(payload));
+    notifyWith(`Added ${name} to Order`)
 
   };
 
@@ -118,6 +130,8 @@ if (urlParams.get('cart')) {
   
     <IonFab slot="fixed" vertical="bottom" horizontal="end">
       <IonButton
+        data-test={price}
+        name='add-to-order'
         onClick={() => handleAddToOrder()}
         className="shadow-2xl font-bold text-base"
       >

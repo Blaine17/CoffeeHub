@@ -16,6 +16,7 @@ import {
   IonTabButton,
   IonLabel,
   IonRouterOutlet,
+  IonToast
 } from "@ionic/react";
 import "./Home.css";
 import { IonReactRouter } from '@ionic/react-router';
@@ -26,20 +27,26 @@ import { bag, cafeOutline } from "ionicons/icons";
 import Menu from "./Menu";
 import { OrderContextProvider } from "../store/OrderContext";
 import OrderContext from "../store/OrderContext";
-import { useContext, useState } from "react";
+// import NotificationContext from "../store/NotificationContext";
+import { useContext, useState, useEffect } from "react";
 import {
   Link,
 } from "react-router-dom"
 import {Route} from 'react-router'
 import ItemPage from "./ItemPage";
 import CartPage from "./CartPage";
-
+import useToast from '../hooks/toastController'
+import NotificationContext, {useNotifier} from '../store/notificationContext'
 // might be able to implement this native wrapper using props.chilren
-const NativeWrapper = ({ title, content }) => {
+const NativeWrapper = ({ title, children }) => {
   const [orderContext, dispatchOrder] = useContext(OrderContext);
+  const [notificationContext, dispatchNotification] = useContext(NotificationContext)
+  const notifyWith = useNotifier()
+  
 
-  const [x, setx] = useState(JSON.stringify(orderContext));
 
+
+  
   return (
     <IonPage>
       <IonHeader>
@@ -53,10 +60,12 @@ const NativeWrapper = ({ title, content }) => {
               {orderContext.length}
             </div>
           </IonButton>
-          <IonTitle size="large">{title}</IonTitle>
+          <IonTitle data-test='title' size="large">{title}</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent>{content}</IonContent>
+      <IonContent>
+        {children}
+      </IonContent>
     </IonPage>
   );
 };

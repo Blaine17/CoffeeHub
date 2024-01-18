@@ -8,12 +8,15 @@ import { CustomizationContextProvider } from "../store/CustomizationContext";
 import CustomizationButton from "../components/CustomizationButton";
 import AddToOrderButton from "../components/AddToOrderButton";
 import SizeSelection from "../components/SizeSelection";
-import CompleteOrderButton from '../components/CompleteOrderButton'
-import { createOutline, addCircleOutline, removeCircleOutline } from "ionicons/icons";
-import User from '../services/users'
-import UserPage from './UserPage'
-import LoginPage from './LoginPage'
-
+import CompleteOrderButton from "../components/CompleteOrderButton";
+import {
+  createOutline,
+  addCircleOutline,
+  removeCircleOutline,
+} from "ionicons/icons";
+import User from "../services/users";
+import UserPage from "./UserPage";
+import LoginPage from "./LoginPage";
 
 import {
   IonContent,
@@ -40,9 +43,9 @@ import {
   IonFab,
   IonFooter,
   IonInput,
-  IonCard, 
+  IonCard,
   useIonToast,
-  IonToast
+  IonToast,
 } from "@ionic/react";
 
 import {
@@ -53,50 +56,56 @@ import {
   useEffect,
   createContext,
   useReducer,
-  useContext
+  useContext,
 } from "react";
 
-import  OrderContext, {saveOrderLocaly, removeOrderLocaly} from "../store/OrderContext";
+import OrderContext, {
+  saveOrderLocaly,
+  removeOrderLocaly,
+} from "../store/OrderContext";
 import { calculateCustomizedPrice } from "../helpers/priceHelper";
-import UserContext, {removeUserLocally, saveUserLocally} from "../store/UserContext";
+import UserContext, {
+  removeUserLocally,
+  saveUserLocally,
+} from "../store/UserContext";
 import Protected from "./Protected";
-import test from "../services/test";
+import test from "../services/authenticate";
 import authenticate from "../hooks/authenticate";
+import { useNotifier } from "../store/notificationContext";
 
 const UserDetails = ({ user, userDispatch }) => {
-
   const handleLogout = () => {
-    userDispatch(removeUserLocally())
-  }
+    userDispatch(removeUserLocally());
+  };
 
-  
-  console.log(user)
+
+  console.log(user);
   return (
     <>
-    <div>user details go here</div>
-    {Object.entries(user).map(item => {
-      return <div key={item}>{item}</div>
-
-  })
-
-    }
-    <Protected/>
-    <button onClick={handleLogout}>Logout</button>
+      <div>user details go here</div>
+      {Object.entries(user).map((item) => {
+        return <div key={item}>{item}</div>;
+      })}
+      <Protected />
+      <button onClick={handleLogout}>Logout</button>
     </>
-  )
-}
+  );
+};
 
 const AccountWrapper = () => {
-  const [user, userDispatch] = useContext(UserContext)
+  const [user, userDispatch] = useContext(UserContext);
 
   const callback = function (authenticatedUser) {
-    return userDispatch(saveUserLocally(authenticatedUser))
-  }
+    return userDispatch(saveUserLocally(authenticatedUser));
+  };
 
   const removeUser = function (authenticatedUser) {
-    return userDispatch(removeUserLocally())
-  }
-  authenticate(user, callback, removeUser)
+    return userDispatch(removeUserLocally());
+  };
+  authenticate(user, callback, removeUser);
+
+  const notifyWith = useNotifier()
+
 
   // currently only checks session is page refreshed
   // useEffect(() => {
@@ -106,39 +115,42 @@ const AccountWrapper = () => {
   //     //logout user
   //   })
   // }, [])
-  console.log(user)
+ 
 
-return (
-  <>
-  {user  
-    ? <UserDetails user={user} userDispatch={userDispatch}/>
-    : <AuthenticationWrapper/>
-  }
-  </>
-)
-}
-
-//might need to prevent default of anchor tag
-const AuthenticationWrapper = ({  }) => {
-  const [register, setRegister] = useState(false)
+  
   return (
     <>
-    {register === true 
-      ? <UserPage/>
-      : <LoginPage/>
-    }
-
-    
-    <div className='flex justify-center whitespace-pre'> 
-    {register == true 
-      ? 'Already have an account? Login'
-      : 'Dont have an Account? Register'} 
-       <a className='text-green-900 font-bold' onClick={() => setRegister(!register)}> here!</a>
-      </div>
-     
+      {user ? (
+        <UserDetails user={user} userDispatch={userDispatch} />
+      ) : (
+        <AuthenticationWrapper />
+      )}
     </>
-  )
+  );
+};
+
+//might need to prevent default of anchor tag
+const AuthenticationWrapper = ({}) => {
+  const [register, setRegister] = useState(false);
+  console.log("sign up or login");
+  return (
+    <>
+      {register === true ? <UserPage /> : <LoginPage />}
+
+      <div className="flex justify-center whitespace-pre">
+        {register == true
+          ? "Already have an account? Login"
+          : "Dont have an Account? Register"}
+        <a
+          className="text-green-900 font-bold"
+          onClick={() => setRegister(!register)}
+        >
+          {" "}
+          here!
+        </a>
+      </div>
+    </>
+  );
 };
 
 export default AccountWrapper;
-

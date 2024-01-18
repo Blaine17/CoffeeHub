@@ -48,19 +48,12 @@ import {
   useContext
 } from "react";
 
+
+
 const ItemPage = ({ match }) => {
-  const [sizeColor, setSizeColor] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [modalData, setModalData] = useState(false);
-
-  const queryClient = useQueryClient();
   const id = useParams().id;
-
-  // const urlParams = new URLSearchParams(window.location.search);
-  // const inCart = urlParams.get('cart')
-  // const orderIndex = Number(urlParams.get('index'))
-  // const [orderContext, dispatchOrder] = useContext(OrderContext)
-  // // const [customizationContext, dispatch] = useContext(CustomizationContext)
 
   const query = useQuery({
     queryKey: [id],
@@ -75,7 +68,7 @@ const ItemPage = ({ match }) => {
   };
 
   if (query.isLoading) return <div>Loading your Coffee</div>;
-
+// create a modal for each customization, display modal based on which buttons was clicked
   //size svgs dont line up to bottom of container
   return (
     <>
@@ -93,6 +86,7 @@ const ItemPage = ({ match }) => {
         <SizeSelection productSizes={product.sizes} />
         <AddToOrderButton basePrice={product.basePrice} name={product.name} id={product.id}/>
         <div className="m-4 text-left text-xl font-bold">Customizations</div>
+        
         {product.customizations.map((customization) => {
           return (
             <CustomizationButton

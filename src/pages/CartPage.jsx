@@ -117,7 +117,7 @@ const OrderItemContainer = ({ item, i }) => {
         <div className='col-span-3'>
           <div className="grid grid-cols-4">
             <div className="col-span-3 font-bold">{item.name}</div>
-            <div className="col-span-1 justify-self-end font-bold w-auto">{`$${itemTotal}`}</div>
+            <div data-test={itemTotal} name='item-base-price' className="col-span-1 justify-self-end font-bold w-auto">{`$${itemTotal}`}</div>
             </div>
        <CustomizationList customizations={item.customizations}/>
        <ModificationBar index={i}/>
@@ -136,7 +136,7 @@ const CustomizationList = ({customizations}) => {
       <li key={item.name} className='grid grid-cols-2'>
         <div className='col-span-1'>{customizationText}</div>
         {/* hide priceMod if 0 or is for drink size*/}
-        {item.name === 'sizeCode' || item.priceMod === 0 ? null : <div  className='col-span-1 text-right'>{`+$${item.priceMod}`}</div>}
+        {item.name === 'sizeCode' || item.priceMod === 0 ? null : <div name='price-modifier' data-test={item.priceMod} className='col-span-1 text-right'>{`+$${item.priceMod}`}</div>}
       </li>
     )
   })
@@ -162,7 +162,11 @@ const CartPage = ({ match }) => {
   //   return userDispatch(removeUserLocally())
   // }
   // authenticate(user, callback, removeUser)
+  console.log(orderContext.length)
 
+  if (orderContext.length === 0) {
+    return <div>Your cart is empty</div>
+  }
   
   return (
     <>

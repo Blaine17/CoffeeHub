@@ -12,7 +12,7 @@ import CompleteOrderButton from '../components/CompleteOrderButton'
 import { createOutline, addCircleOutline, removeCircleOutline } from "ionicons/icons";
 import loginService from '../services/login'
 import UserContext, { saveUserLocally } from "../store/UserContext";
-
+import useToast from '../hooks/toastController'
 
 import {
   IonContent,
@@ -56,6 +56,7 @@ import {
 } from "react";
 import  OrderContext, {saveOrderLocaly, removeOrderLocaly} from "../store/OrderContext";
 import { calculateCustomizedPrice } from "../helpers/priceHelper";
+import { useNotification, useNotifier} from "../store/notificationContext";
 
 
 
@@ -63,7 +64,7 @@ const LoginPage = ({  }) => {
 
   const [user, userDispatch] = useContext(UserContext)
 
-
+  const notifyWith = useNotifier()
   const login = (e) => {
     e.preventDefault()
     const payload = {
@@ -77,7 +78,9 @@ const LoginPage = ({  }) => {
       userDispatch(saveUserLocally(data))
     })
     .catch(error => {
-    toastEvent.notify(error.response.data.error)
+
+    // toastEvent.notify(error.response.data.error)
+    notifyWith(error.response.data.error)
     console.log(error.response.data)
 
    })
@@ -87,7 +90,7 @@ const LoginPage = ({  }) => {
     const [value, setValue] = useState('')
 
     const onChange = (event) => {
-      console.log(event.target.value)
+     
       setValue(event.target.value)
     }
 
@@ -98,43 +101,43 @@ const LoginPage = ({  }) => {
   const email = useField('email')
   const password = useField('password')
 
-  const useToast = () => {
-    const [isOpen, setIsOpen] = useState(false)
-    const [message, setMessage] = useState('')
+  // const useToast = () => {
+  //   const [isOpen, setIsOpen] = useState(false)
+  //   const [message, setMessage] = useState('')
 
-    const notify = (message) => {
-      console.log('notify works')
-      setIsOpen(true)
-      setMessage(message)
-      setTimeout(() => setIsOpen(false), 5000)
-    }
+  //   const notify = (message) => {
+  //     console.log('notify works')
+  //     setIsOpen(true)
+  //     setMessage(message)
+  //     setTimeout(() => setIsOpen(false), 5000)
+  //   }
 
-    const toastEvent = {
-      notify
-    }
+  //   const toastEvent = {
+  //     notify
+  //   }
 
-    const toastComponent = {
-      get message() {
-        return message
-      },
-      get isOpen() {
-        return isOpen
-      }
-    }
+  //   const toastComponent = {
+  //     get message() {
+  //       return message
+  //     },
+  //     get isOpen() {
+  //       return isOpen
+  //     }
+  //   }
 
-    return {
-      toastEvent,
-      toastComponent,
-    }
-  }
+  //   return {
+  //     toastEvent,
+  //     toastComponent,
+  //   }
+  // }
 
-  const {toastEvent, toastComponent} = useToast()
-  console.log(user)
+  // const {toastEvent, toastComponent} = useToast()
+  // console.log(user)
 
   
   return (
     <>
-    <div className="m-4 text-center text-2xl font-bold">Login</div>
+    <div data-test='login' className="m-4 text-center text-2xl font-bold">Login</div>
     <IonCard >
     <form onSubmit={e => login(e)}>
     <IonList>
@@ -150,7 +153,6 @@ const LoginPage = ({  }) => {
     <IonButton id='login' type="submit" className='pt-1' size='default' expand="block">Login</IonButton>
     </form>
     </IonCard>
-    <IonToast  positionAnchor="tabBar" {...toastComponent}></IonToast>
     {/* <IonToast  positionAnchor="tabBar" isOpen={isOpen} onDidDismiss={() => setIsOpen(false)} message={toastMessage} duration={5000}></IonToast> */}
     
     </>

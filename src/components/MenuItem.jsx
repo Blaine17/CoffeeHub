@@ -6,7 +6,7 @@ const MenuItem = ({ item }) => {
 
   return (
     
-    <li> 
+    <li data-test='item'> 
     <Link className='flex items-center gap-4 p-2'to={`/product/${item.name}`}>
       <img className='rounded-full flex-initial w-24' width="100" height="100" src={item.assests.imgUrl}></img>
       <span className='flex-initial w-72 font-bold text-xl justify-self-end'>

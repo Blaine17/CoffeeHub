@@ -66,7 +66,7 @@ const AmountSelector = ({ modalData, setIsOpen, item, amount }) => {
       >
         {amount.map((option) => {
           return (
-            <IonSelectOption key={option} value={option}>
+            <IonSelectOption data-test='customization-option' key={option} value={option}>
               {option}
             </IonSelectOption>
           );

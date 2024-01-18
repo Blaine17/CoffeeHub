@@ -2,19 +2,19 @@ require('dotenv').config()
 
 const PORT = process.env.PORT || 3001
 
-console.log(process.env.NODE_ENV)
 
 const ACCESSTIME = process.env.NODE_ENV === 'development'
-  ? process.env.ACCESSTOKENEXP
-  : 5
+  ? Number(process.env.ACCESSTOKENEXP)
+  : Number(process.env.TESTACCESSTOKENEXP)
 
 const REFRESHTIME = process.env.NODE_ENV === 'development'
-  ? process.env.REFRESHTOKENEXP
-  : 10
+  ? Number(process.env.REFRESHTOKENEXP)
+  : Number(process.env.TESTREFRESHTOKENEXP)
+
+console.log('jkbnjbnjkl', process.env.TESTREFRESHTOKENEXP)
 // const ACCESSTIME = process.env.ACCESSTOKENEXP || 5
 
 // const REFRESHTIME = process.env.REFRESHTOKENEXP || 15
-
 
 const MONGODB_URI = process.env.NODE_ENV === 'development'
   ? process.env.TEST_MONGODB_URI

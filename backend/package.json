@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "NODE_ENV=development nodemon index.js",
     "start": "node index.js",
-    "start:test": "NODE_ENV=test nodemon index.js"
+    "start:test": "NODE_ENV=test CYPRESS_ENV=test nodemon index.js"
   },
   "author": "Blaine Butterworth",
   "license": "MIT",

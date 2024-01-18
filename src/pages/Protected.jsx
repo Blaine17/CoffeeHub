@@ -8,9 +8,12 @@ import { CustomizationContextProvider } from "../store/CustomizationContext";
 import CustomizationButton from "../components/CustomizationButton";
 import AddToOrderButton from "../components/AddToOrderButton";
 import SizeSelection from "../components/SizeSelection";
-import CompleteOrderButton from '../components/CompleteOrderButton'
-import { createOutline, addCircleOutline, removeCircleOutline } from "ionicons/icons";
-
+import CompleteOrderButton from "../components/CompleteOrderButton";
+import {
+  createOutline,
+  addCircleOutline,
+  removeCircleOutline,
+} from "ionicons/icons";
 
 import {
   IonContent,
@@ -46,32 +49,38 @@ import {
   useEffect,
   createContext,
   useReducer,
-  useContext
+  useContext,
 } from "react";
-import  OrderContext, {saveOrderLocaly, removeOrderLocaly} from "../store/OrderContext";
+import OrderContext, {
+  saveOrderLocaly,
+  removeOrderLocaly,
+} from "../store/OrderContext";
 import { calculateCustomizedPrice } from "../helpers/priceHelper";
-import test from '../services/test'
-import UserContext, { saveUserLocally, removeUserLocally } from "../store/UserContext";
+import test from "../services/authenticate";
+import UserContext, {
+  saveUserLocally,
+  removeUserLocally,
+} from "../store/UserContext";
 
 const Protected = () => {
-  const [user, userDispatch] = useContext(UserContext)
+  const [user, userDispatch] = useContext(UserContext);
   const callback = function (authenticatedUser) {
-    return userDispatch(saveUserLocally(authenticatedUser))
-  }
+    return userDispatch(saveUserLocally(authenticatedUser));
+  };
   const handleClick = () => {
-    test.test(user, callback)
-      .then(response => {
-        console.log(response)
-      }).catch(error => {
-        console.log(error.message)
-        userDispatch(removeUserLocally())
-        //logout user
+    test
+      .test(user, callback)
+      .then((response) => {
+        console.log(response);
       })
-  }
+      .catch((error) => {
+        console.log(error.message);
+        userDispatch(removeUserLocally());
+        //logout user
+      });
+  };
 
-  return (
-    <button onClick={handleClick}>dcsCsd</button>
-  )
-}
+  return <button onClick={handleClick}>dcsCsd</button>;
+};
 
-export default Protected
+export default Protected;

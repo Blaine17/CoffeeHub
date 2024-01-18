@@ -7,13 +7,6 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import OrderContext from "../store/OrderContext";
 
 const Menu = () => {
-  const [orderContext, dispatchOrder] = useContext(OrderContext);
-  const [x, setx] = useState(JSON.stringify(orderContext));
-
-  const [temp, setTemp] = useState(null);
-  const [categories, setCategories] = useState(null);
-
-  const queryClient = useQueryClient();
 
   const query = useQuery({
     queryKey: ["menuCategories"],
@@ -21,9 +14,6 @@ const Menu = () => {
   });
 
   const items = query.data;
-
-  
-
 
   if (query.isLoading) return null;
 

@@ -57,9 +57,9 @@ const CustomizationButton = ({ modalData, handleClick, customization }) => {
       <IonIcon size="large" icon={caretDownCircleOutline} slot="end"></IonIcon>
       
     </IonButton> */}
-    <div className='flex h-20 w-auto'>
+    <div  className='flex h-20 w-auto'>
       <label className='absolute p-1 translate-x-6 bg-white '>{customization.name}</label>
-      <button className='grid p-2 grid-cols-2 items-center content-center border-solid border-2 border-green-800 w-full m-4 rounded-lg text-left' onClick={() => handleClick(customization)}>
+      <button name='customization-button' className='grid p-2 grid-cols-2 items-center content-center border-solid border-2 border-green-800 w-full m-4 rounded-lg text-left' onClick={() => handleClick(customization)}>
       <p className='col-span-1'>{choice}</p>
       <IonIcon className='col-span-1 justify-self-end' size="large" icon={caretDownCircleOutline}></IonIcon>
     </button></div>

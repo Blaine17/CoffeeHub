@@ -1,9 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import UserContext, {saveUserLocally, removeUserLocally} from '../store/UserContext';
 import authenticate from '../hooks/authenticate';
+import AccountWrapper from './AccountWrapper';
+import NativeWrapper from './NativeWrapper';
 import { Redirect } from 'react-router';
+import { useNotifier } from '../store/notificationContext';
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ title, children }) => {
     const [user, userDispatch] = useContext(UserContext);
 
     const callback = function (authenticatedUser) {
@@ -15,12 +18,20 @@ const ProtectedRoute = ({ children }) => {
       }
       authenticate(user, callback, removeUser)
 
-      console.log(!user)
-      console.log('hello')
+      const notifyWith = useNotifier()
 
+      useEffect(() => {
+        if (!user) {
+          notifyWith(`login to view ${title}`)
+        }
+      }, [])
+    
+
+
+   
     if (!user) {
         // Redirect to login page if not logged in
-        return <Redirect to="/account" />;
+        return <AccountWrapper/>
     }
 
     return <>{children}</>;

@@ -35,3 +35,13 @@
 //     }
 //   }
 // }
+
+Cypress.Commands.add('login', ({ email, password }) => {
+  cy.request('POST', 'http://localhost:3000/api/login', {
+    email: "test@test.com", password: 'ThisIsASecurePassword1$'
+  }).then(({ body }) => {
+    cy.log(body)
+    localStorage.setItem('User', JSON.stringify(body))
+    cy.visit('http://localhost:8100')
+  })
+})

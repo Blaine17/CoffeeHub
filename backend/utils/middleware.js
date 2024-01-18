@@ -46,6 +46,7 @@ const registerValidator = (request, response, next) => {
 const loginValidator = async (request, response, next) => {
 
   const {email, password } = request.body
+  console.log(email, password)
  
 
   const user = await User.findOne({ email })
@@ -84,7 +85,6 @@ const errorHandler = (error, request, response, next) => {
 //takes token from headers
 const getTokenFrom = (request) => {
   const authorization = request.get('Authorization')
-  console.log(authorization)
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     return authorization.substring(7)
   }
@@ -133,6 +133,7 @@ const userExtractor = async (request, response, next) => {
     } catch (accessTokenError) {
       console.log('access token expired')
       const refreshToken = request.get('RefreshToken');
+      console.log('refreshtoken', refreshToken)
 
       try {
         const decodedRefreshToken = await verifyRefreshToken(refreshToken);

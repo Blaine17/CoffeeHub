@@ -41,11 +41,8 @@ loginRouter.post('/', loginValidator, async (request, response) => {
   const refreshTokens = jwt.sign(userForToken, config.SECRET, {expiresIn: config.REFRESHTIME})
  
 
-  // const findRefreshToken = async () => {
-  //   const temp =  await User.findByIdAndUpdate(user._id, {refreshTokens} )
-
-  //   return temp
-  // }
+  console.log('login access token', accessToken)
+  console.log('login refresh token', refreshTokens)
   await User.findByIdAndUpdate(user._id, {refreshTokens} )
 
  
